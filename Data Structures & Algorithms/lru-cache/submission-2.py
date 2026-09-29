@@ -1,0 +1,44 @@
+class ListNode:
+    def __init__(self,val,prev=None,next=None) -> None:
+        self.val = val
+        self.prev = prev
+        self.next = next
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.dic = dict()
+        self.dummy = ListNode(-1)
+        self.c = capacity
+        self.count = 0
+        self.last = self.dummy
+        
+
+    def get(self, key: int) -> int:
+        if key in self.dic:
+            return self.dic[key].val[1]
+        else:
+            return -1
+        
+
+    def put(self, key: int, value: int) -> None:
+        if self.count < self.c:
+            self.count +=1
+            x = ListNode((key,value),self.last)
+            self.last.next = x
+            self.last = x
+            self.dic[key] = x
+        else:
+            x = ListNode((key,value),self.last)
+            self.last.next = x
+            self.last = x
+            self.dic[key] = x
+
+            nxt = self.dummy.next
+            self.dummy.next = nxt.next
+            nxt.next = None
+            nxt.prev = None
+            self.dummy.next.prev = self.dummy
+
+            print("Current dic keys:", list(self.dic.keys()))
+            print("Trying to pop key:", nxt.val[0], "Node val is:", nxt.val)
+            self.dic.pop(nxt.val[0])    
